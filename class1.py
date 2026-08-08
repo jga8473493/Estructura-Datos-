@@ -50,12 +50,16 @@ if __name__ == "__main__":
 
 def contar(lista):
     """Devuelve cuántos elementos tiene la lista. No uses len()."""
-    return lista.lenght()
+    return len(lista)   
     pass
 
 
 def suma(lista):
     """Devuelve la suma de los elementos. No uses sum()."""
+    total = 0
+    for elemento in lista:
+        total += elemento
+    return total
     pass
 
 
@@ -78,3 +82,5 @@ def invertida(lista):
 def invertir_en_sitio(lista):
     """Invierte la lista MODIFICANDO la original. No devuelve nada."""
     pass
+
+#
