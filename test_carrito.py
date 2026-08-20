@@ -1,5 +1,5 @@
 import pytest
-import carrito_dict as car  # Todavía no existe, por eso va a fallar
+import carrito_dict as car
 
 def test_carrito_vacio():
     c = car.crear_carrito()
