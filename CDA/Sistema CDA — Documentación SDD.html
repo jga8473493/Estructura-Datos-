@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sistema CDA — Documentación SDD</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef1f2;--card:#fff;--ink:#14232b;--mute:#5a6b73;--line:#d3dbde;--plate:#ffc72c;--plate-ink:#14232b;--esp:#c8372d;--teal:#0f5c63;--tealbg:#dcecee;--espbg:#fbe4e1;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1a1f;--card:#17262d;--ink:#e9eff1;--mute:#9fb0b7;--line:#2c3f47;--tealbg:#17383d;--espbg:#3a1e1c;--teal:#6cc3cb;--esp:#ff7a6e}}
+:root[data-theme="dark"]{--bg:#0f1a1f;--card:#17262d;--ink:#e9eff1;--mute:#9fb0b7;--line:#2c3f47;--tealbg:#17383d;--espbg:#3a1e1c;--teal:#6cc3cb;--esp:#ff7a6e}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 Barlow,system-ui,sans-serif}
+.wrap{max-width:900px;margin:0 auto;padding:20px 16px 48px}
+h1,h2,h3{font-family:"Barlow Condensed",Impact,sans-serif;margin:0;line-height:1.1}
+h1{font-size:clamp(34px,7vw,52px);letter-spacing:.5px}
+h2{font-size:28px;margin:28px 0 12px}h3{font-size:20px;margin:0 0 6px}
+.head{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:6px}
+.plate{background:var(--plate);color:var(--plate-ink);font:700 22px "Barlow Condensed",Impact,sans-serif;letter-spacing:3px;padding:4px 14px;border:3px solid var(--plate-ink);border-radius:8px}
+.sub{color:var(--mute);margin:4px 0 18px}
+nav{display:flex;gap:6px;flex-wrap:wrap;border-bottom:2px solid var(--line);margin-bottom:8px}
+nav button{font:600 16px Barlow,sans-serif;background:none;border:0;color:var(--mute);padding:10px 14px;cursor:pointer;border-bottom:4px solid transparent;margin-bottom:-2px}
+nav button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--plate)}
+nav button:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+section{display:none}section.on{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin:10px 0}
+.hu{border-left:6px solid var(--teal)}.hu.esp{border-left-color:var(--esp)}
+.hu small{color:var(--mute);font-weight:600}
+.ca{margin:8px 0 0;padding:0;list-style:none}
+.ca li{padding:6px 0;border-top:1px dashed var(--line);font-size:15px}
+.ca b{color:var(--teal);margin-right:6px}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:520px;background:var(--card);border:1px solid var(--line)}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top;font-size:15px}
+th{background:var(--tealbg);font-weight:600}
+.chip{display:inline-block;font-weight:600;font-size:13px;padding:2px 9px;border-radius:99px;background:var(--tealbg);color:var(--teal)}
+.chip.ok{background:#d8f0dc;color:#1e6b2f}
+@media (prefers-color-scheme:dark){.chip.ok{background:#1d3d25;color:#7fd993}}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.lane{border-radius:10px;padding:14px;margin:10px 0}
+.lane.e{background:var(--espbg);border:2px solid var(--esp)}
+.lane.n{background:var(--tealbg);border:2px solid var(--teal)}
+.lane h3{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.cars{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;align-items:center}
+.car{background:var(--plate);color:var(--plate-ink);border:2px solid var(--plate-ink);border-radius:6px;font:700 17px "Barlow Condensed",sans-serif;letter-spacing:2px;padding:2px 10px}
+.out{font-weight:600;color:var(--mute);margin:0 4px}
+.flow{text-align:center;font-weight:600;color:var(--mute);margin:4px 0}
+code{background:var(--tealbg);padding:1px 6px;border-radius:4px;font-size:14px;word-break:break-all}
+ol.rules{padding-left:22px}ol.rules li{margin:6px 0}
+.foot{margin-top:30px;color:var(--mute);font-size:14px}
+@media print{nav{display:none}section{display:block!important}body{background:#fff}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head"><span class="plate">CDA</span><h1>Sistema de atención CDA</h1></div>
+  <p class="sub">Documentación SDD (Desarrollo Dirigido por Especificación): Requisitos → Diseño → Tareas → Implementación</p>
+  <nav role="tablist" id="tabs"></nav>
+
+  <section id="resumen">
+    <h2>Resumen</h2>
+    <div class="card"><p>Sistema de consola en Python que gestiona la atención de vehículos en un Centro de Diagnóstico Automotor. Permite registrar vehículos (tipo, placa colombiana validada, marca y color), consultar cuál sigue, atenderlo, retirarlo de la cola por placa y ver cuántos faltan.</p>
+    <p>Los <b>vehículos especiales</b> (ambulancia, bomberos, policía) tienen atención prioritaria.</p></div>
+    <h3>Problema y objetivo</h3>
+    <div class="grid">
+      <div class="card"><h3>Problema</h3>Atender solo por orden de llegada no contempla vehículos especiales, que requieren prioridad.</div>
+      <div class="card"><h3>Objetivo</h3>Atender primero a los especiales y mantener el orden de llegada entre los demás.</div>
+    </div>
+    <h3>Usuarios</h3>
+    <div class="grid" id="usuarios"></div>
+  </section>
+
+  <section id="requisitos">
+    <h2>Historias de usuario y criterios de aceptación</h2>
+    <div id="hus"></div>
+    <h2>Requisitos funcionales</h2>
+    <div class="tablewrap"><table><thead><tr><th>ID</th><th>Requisito</th><th>Origen</th></tr></thead><tbody id="rf"></tbody></table></div>
+    <h2>Requisitos no funcionales</h2>
+    <div class="tablewrap"><table><thead><tr><th>ID</th><th>Requisito</th></tr></thead><tbody id="rnf"></tbody></table></div>
+  </section>
+
+  <section id="diseno">
+    <h2>Dos colas, una prioridad</h2>
+    <p class="sub">Siempre se atiende primero la fila de especiales. Cuando está vacía, se pasa a la normal.</p>
+    <div class="flow">Registro: el tipo de vehículo decide a qué fila entra</div>
+    <div class="lane e"><h3>Cola de especiales <span class="chip">se atiende primero</span></h3>
+      <div class="cars"><span class="out">Sale ▶</span><span class="car">ABC123</span><span class="car">DEF456</span></div></div>
+    <div class="lane n"><h3>Cola normales <span class="chip">solo si no hay especiales</span></h3>
+      <div class="cars"><span class="out">Sale ▶</span><span class="car">GHI78J</span><span class="car">KLM789</span><span class="car">NOP12Q</span></div></div>
+    <p class="sub">Dentro de cada fila el orden es de llegada (FIFO).</p>
+
+    <h2>Reglas de priorización</h2>
+    <div class="card"><ol class="rules">
+      <li>Los especiales se atienden antes que los normales.</li>
+      <li>Entre especiales, por orden de llegada.</li>
+      <li>Entre normales, por orden de llegada.</li>
+      <li>Un normal solo se atiende cuando no hay especiales pendientes.</li></ol></div>
+
+    <h2>Modelo del vehículo</h2>
+    <div class="grid">
+      <div class="card"><h3>Campos (en orden)</h3>1. Tipo (lista fija)<br>2. Placa (validada)<br>3. Marca<br>4. Color (solo letras)</div>
+      <div class="card"><h3>Placas colombianas</h3>Carro y especiales: <code>^[A-Z]{3}\d{3}$</code> → ABC123<br>Moto: <code>^[A-Z]{3}\d{2}[A-Z]$</code> → ABC12D</div>
+    </div>
+
+    <h2>Operaciones</h2>
+    <div class="tablewrap"><table><thead><tr><th>Operación</th><th>Lógica</th><th>RF</th></tr></thead><tbody>
+      <tr><td><code>registrar</code></td><td>Rechaza placa repetida. Especial a su cola, normal a la suya.</td><td>RF-01 a 03</td></tr>
+      <tr><td><code>siguiente</code></td><td>Primero de especiales; si no hay, de normales. No retira.</td><td>RF-04 a 06</td></tr>
+      <tr><td><code>atender</code></td><td>Como siguiente, pero lo retira.</td><td>RF-07</td></tr>
+      <tr><td><code>pendientes</code></td><td>Suma el tamaño de ambas colas.</td><td>RF-08</td></tr>
+      <tr><td><code>retirar(placa)</code></td><td>Busca la placa en ambas colas y la saca.</td><td>RF-11</td></tr>
+    </tbody></table></div>
+    <div class="card"><b>Decisión de diseño:</b> dos colas en lugar de una ordenada. Registrar y atender no recorren toda la cola y el orden se mantiene solo (RNF-02).</div>
+    <div class="card"><b>Archivos:</b> <code>vehiculo.py</code> (modelo y validación) · <code>cola_cda.py</code> (operaciones) · <code>main.py</code> (menú) · <code>pruebas.py</code> (una prueba por CA)</div>
+  </section>
+
+  <section id="tareas">
+    <h2>Tareas</h2>
+    <div class="tablewrap"><table><thead><tr><th>ID</th><th>Tarea</th><th>Archivo</th><th>RF</th><th>Estado</th></tr></thead><tbody id="tb"></tbody></table></div>
+    <p class="sub">Orden seguido: T-01 → T-02 a T-06 → T-08 → T-07 → T-09 → T-10.</p>
+  </section>
+
+</div>
+<script>
+var HU=[
+["HU-01","Registrar vehículo","Como recepcionista quiero registrar un vehículo (tipo, placa, marca, color) para que entre a la cola.",false,[["CA-01","Con datos válidos, queda en la cola de pendientes."],["CA-02","Una placa ya pendiente se rechaza."],["CA-12","Una placa con formato inválido para el tipo se rechaza y se vuelve a pedir."]]],
+["HU-02","Identificar vehículo especial","Como recepcionista quiero que el sistema identifique ambulancias, bomberos y policía para darles prioridad.",true,[["CA-03","Un vehículo de tipo especial se identifica como especial al registrarse."]]],
+["HU-03","Atención prioritaria","Como administrador quiero que los especiales se atiendan primero.",true,[["CA-04","Con normales y un especial en cola, el siguiente es el especial."],["CA-05","Entre varios especiales, el siguiente es el que llegó primero."],["CA-06","Con solo normales, el siguiente es el que llegó primero."]]],
+["HU-04","Consultar siguiente","Como técnico quiero ver cuál vehículo sigue sin retirarlo.",false,[["CA-07","Se ven sus datos y la cola no cambia."],["CA-08","Con la cola vacía, avisa que no hay vehículos pendientes."]]],
+["HU-05","Atender vehículo","Como técnico quiero atender el siguiente y que salga de la cola.",false,[["CA-09","Se retira de la cola y los demás conservan su orden."],["CA-10","Con la cola vacía, avisa que no hay vehículos."]]],
+["HU-06","Contar pendientes","Como administrador quiero saber cuántos vehículos faltan por atender.",false,[["CA-11","Con N vehículos en cola, el resultado es N."]]],
+["HU-07","Retirar vehículo de la cola","Como recepcionista quiero retirar un vehículo por placa (por ejemplo, si el dueño se fue).",false,[["CA-13","Un vehículo pendiente sale de la cola y los demás conservan su orden."],["CA-14","Una placa que no está en la cola devuelve un aviso."]]]];
+var RF=[["RF-01","Registrar vehículos (tipo, placa, marca, color)","HU-01"],["RF-02","No permitir placas duplicadas pendientes","HU-01"],["RF-03","Identificar si un vehículo es especial según su tipo","HU-02"],["RF-04","Atender primero a los especiales","HU-03"],["RF-05","Mantener orden de llegada dentro de cada grupo","HU-03"],["RF-06","Consultar el siguiente sin retirarlo","HU-04"],["RF-07","Atender y retirar el siguiente de la cola","HU-05"],["RF-08","Contar vehículos pendientes","HU-06"],["RF-09","Validar placa colombiana según tipo (carro ABC123, moto ABC12D)","HU-01"],["RF-10","El tipo de vehículo se elige de una lista fija","HU-01"],["RF-11","Retirar un vehículo de la cola por placa","HU-07"]];
+var RNF=[["RNF-01","Código sencillo y comentado, fácil de explicar en clase."],["RNF-02","Registrar y atender eficientes, sin recorrer toda la cola."],["RNF-03","Mensajes de error claros para el usuario."],["RNF-04","Cada criterio de aceptación tiene una prueba automática."],["RNF-05","Campos del formulario en orden: tipo, placa, marca, color."]];
+var T=[["T-01","Clase Vehiculo (tipo, placa, marca, color, es_especial)","vehiculo.py","RF-01, 03"],["T-02","Clase ColaCDA con las dos colas","cola_cda.py","RF-04, 05"],["T-03","registrar() con validación de placa duplicada","cola_cda.py","RF-01, 02"],["T-04","siguiente() con prioridad a especiales","cola_cda.py","RF-04, 06"],["T-05","atender()","cola_cda.py","RF-07"],["T-06","pendientes()","cola_cda.py","RF-08"],["T-07","Menú de consola","main.py","Todos"],["T-08","Pruebas, una por cada CA","pruebas.py","CA-01 a 14"],["T-09","Validar placa colombiana y tipo de lista fija","vehiculo.py, main.py","RF-09, 10"],["T-10","retirar() por placa y su opción de menú","cola_cda.py, main.py","RF-11"]];
+var U=[["Recepcionista","Registra y retira vehículos."],["Técnico","Consulta y atiende vehículos."],["Administrador","Consulta el estado de la cola."]];
+function $(i){return document.getElementById(i)}
+$("usuarios").innerHTML=U.map(function(u){return '<div class="card"><h3>'+u[0]+'</h3>'+u[1]+'</div>'}).join("");
+$("hus").innerHTML=HU.map(function(h){return '<div class="card hu'+(h[3]?' esp':'')+'"><small>'+h[0]+'</small><h3>'+h[1]+'</h3>'+h[2]+'<ul class="ca">'+h[4].map(function(c){return '<li><b>'+c[0]+'</b>'+c[1]+'</li>'}).join("")+'</ul></div>'}).join("");
+$("rf").innerHTML=RF.map(function(r){return '<tr><td>'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td></tr>'}).join("");
+$("rnf").innerHTML=RNF.map(function(r){return '<tr><td>'+r[0]+'</td><td>'+r[1]+'</td></tr>'}).join("");
+$("tb").innerHTML=T.map(function(t){return '<tr><td>'+t[0]+'</td><td>'+t[1]+'</td><td><code>'+t[2]+'</code></td><td>'+t[3]+'</td><td><span class="chip ok">Hecha</span></td></tr>'}).join("");
+var TABS=[["resumen","Resumen"],["requisitos","Requisitos"],["diseno","Diseño"],["tareas","Tareas"]];
+function show(id){TABS.forEach(function(t){$(t[0]).classList.toggle("on",t[0]===id);$("b-"+t[0]).setAttribute("aria-selected",t[0]===id)})}
+$("tabs").innerHTML=TABS.map(function(t){return '<button role="tab" id="b-'+t[0]+'">'+t[1]+'</button>'}).join("");
+TABS.forEach(function(t){$("b-"+t[0]).onclick=function(){show(t[0])}});
+show("resumen");
+</script>
+</body>
+</html>
